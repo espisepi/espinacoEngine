@@ -24,6 +24,7 @@
     "@angular/router": "^8.2.14",
     "@avatsaev/three-orbitcontrols-ts": "^0.1.5",
     "bootstrap": "^4.4.1",
+    "p5": "^0.10.2",
     "rxjs": "^6.5.4",
     "three": "^0.110.0",
     "three-gltf-loader": "^1.111.0",
