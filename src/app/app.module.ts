@@ -11,6 +11,7 @@ import { UiComponent } from './ui/ui.component';
 import { Demo1Component } from './demo1/demo1.component';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { ThreejsComponent } from './components/threejs/threejs.component';
+import { ProcessingComponent } from './components/processing/processing.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ThreejsComponent } from './components/threejs/threejs.component';
     UiSidebarLeftComponent,
     UiSidebarRightComponent,
     Demo1Component,
-    ThreejsComponent
+    ThreejsComponent,
+    ProcessingComponent
   ],
   imports: [
     BrowserModule,
