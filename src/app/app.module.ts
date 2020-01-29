@@ -10,6 +10,7 @@ import { UiSidebarRightComponent } from './ui/ui-sidebar-right/ui-sidebar-right.
 import { UiComponent } from './ui/ui.component';
 import { Demo1Component } from './demo1/demo1.component';
 import { AppRoutingModule } from './app-routing/app-routing.module';
+import { ThreejsComponent } from './components/threejs/threejs.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
     UiInfobarTopComponent,
     UiSidebarLeftComponent,
     UiSidebarRightComponent,
-    Demo1Component
+    Demo1Component,
+    ThreejsComponent
   ],
   imports: [
     BrowserModule,
