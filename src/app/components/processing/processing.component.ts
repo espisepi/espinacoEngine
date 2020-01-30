@@ -3,6 +3,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ProcessingService } from '../../services/processing.service';
+import { P5ShaderService } from 'src/app/services/p5-shader.service';
 
 @Component({
   selector: 'app-processing',
@@ -11,28 +12,11 @@ import { ProcessingService } from '../../services/processing.service';
 })
 export class ProcessingComponent implements OnInit {
 
-  constructor(private processingService: ProcessingService) { }
+  // inside constructor: private processingService: ProcessingService
+  constructor( private p5ShaderService: P5ShaderService ) { }
 
   ngOnInit() {
-    
-    this.processingService.start();
-    //this.createCanvas();
+    this.p5ShaderService.start();
   }
-
-  // private createCanvas(): void {
-  //   this.p5 = new P5(this.sketch);
-  // }
-
-  // private sketch(p: any) {
-  //   p.setup = () => {
-  //     p.createCanvas(700, 600);
-  //   };
-
-  //   p.draw = () => {
-  //     p.background(255);
-  //     p.fill(0);
-  //     p.rect(p.width / 2, p.height / 2, 50, 50);
-  //   };
-  // }
 
 }
