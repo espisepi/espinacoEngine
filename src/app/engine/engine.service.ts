@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 //import { OrbitControls } from 'three/examples/js/controls/OrbitControls';
 import { OrbitControls } from '@avatsaev/three-orbitcontrols-ts';
+import { GeometryUtils } from 'three';
 
 @Injectable({
   providedIn: 'root'
@@ -44,13 +46,94 @@ export class EngineService implements OnDestroy {
 
     this.crearCamara();
     this.crearLuzAmbiental();
+    //this.loadObj('/assets/models/texturedMesh.obj');
     this.crearCubo();
     this.loadGltf('/assets/scene.gltf');
-    this.crearFireTorus();
+    //this.crearFireTorus();
+    //this.crearPantalla();
 
     // ponemos el orbitControls
     let controls = new OrbitControls(this.camera, this.renderer.domElement);
 
+  }
+  animate(): void {
+    // We have to run this outside angular zones,
+    // because it could trigger heavy changeDetection cycles.
+    this.ngZone.runOutsideAngular(() => {
+      if (document.readyState !== 'loading') {
+        this.render();
+      } else {
+        window.addEventListener('DOMContentLoaded', () => {
+          this.render();
+        });
+      }
+
+      window.addEventListener('resize', () => {
+        this.resize();
+      });
+    });
+  }
+
+  render() {
+    this.frameId = requestAnimationFrame(() => {
+      this.render();
+    });
+
+    //this.cube.rotation.x += 0.01;
+    //this.cube.rotation.y += 0.01;
+    this.renderer.render(this.scene, this.camera);
+  }
+
+  resize() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+
+    this.renderer.setSize( width, height );
+  }
+
+  // ------METODOS CREADOS PARA ORDENAR CODIGO ---------
+
+  crearPantalla(): void {
+    // https://threejs.org/docs/#api/en/core/BufferGeometry
+    const geometry = new THREE.BufferGeometry();
+    const vertices = new Float32Array( [
+      -1.0, -1.0, 1.0,
+      1.0, -1.0,  1.0,
+      1.0,  1.0,  1.0,
+
+      1.0,  1.0,  1.0,
+      -1.0,  1.0,  1.0,
+      -1.0, -1.0,  1.0
+    ]);
+    geometry.setAttribute( 'aPosition', new
+      THREE.BufferAttribute( vertices, 3 ) );
+
+    // https://threejs.org/docs/#api/en/materials/ShaderMaterial
+    // https://github.com/mrdoob/three.js/blob/master/examples/webgl_shader2.html
+    const vertexShader = `
+      attribute vec3 aPosition;
+      void main() {
+        vec4 mvPosition = modelViewMatrix * vec4( aPosition, 1.0 );
+				gl_Position = projectionMatrix * mvPosition;
+      }
+    `;
+    const fragmentShader = `
+      precision mediump float;
+      varying vec2 vTextCoord;
+      void main() {
+        vec2 coord = vTexCoord;
+        gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0);
+      }
+    `;
+    const material = new THREE.ShaderMaterial({
+      vertexShader: vertexShader,
+      fragmentShader: fragmentShader
+    });
+    const pantalla = new THREE.Mesh( geometry, material );
+    this.scene.add(pantalla);
   }
 
   crearFireTorus() {
@@ -178,43 +261,14 @@ export class EngineService implements OnDestroy {
     var addGltfToScene = (gltfReal) => this.scene.add(gltfReal);
   }
 
-  animate(): void {
-    // We have to run this outside angular zones,
-    // because it could trigger heavy changeDetection cycles.
-    this.ngZone.runOutsideAngular(() => {
-      if (document.readyState !== 'loading') {
-        this.render();
-      } else {
-        window.addEventListener('DOMContentLoaded', () => {
-          this.render();
-        });
-      }
-
-      window.addEventListener('resize', () => {
-        this.resize();
-      });
+  loadObj(path: string): void {
+    const loader = new OBJLoader();
+    loader.load(path, function(object) {
+      addObjToScene(object);
     });
+    var addObjToScene = (object) => this.scene.add(object);
   }
 
-  render() {
-    this.frameId = requestAnimationFrame(() => {
-      this.render();
-    });
-
-    this.cube.rotation.x += 0.01;
-    this.cube.rotation.y += 0.01;
-    this.renderer.render(this.scene, this.camera);
-  }
-
-  resize() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
-    this.camera.aspect = width / height;
-    this.camera.updateProjectionMatrix();
-
-    this.renderer.setSize( width, height );
-  }
 }
 
 
