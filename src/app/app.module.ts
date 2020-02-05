@@ -12,6 +12,7 @@ import { Demo1Component } from './demo1/demo1.component';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { ThreejsComponent } from './components/threejs/threejs.component';
 import { ProcessingComponent } from './components/processing/processing.component';
+import { NebulaCloudComponent } from './components/nebula-cloud/nebula-cloud.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ProcessingComponent } from './components/processing/processing.componen
     UiSidebarRightComponent,
     Demo1Component,
     ThreejsComponent,
-    ProcessingComponent
+    ProcessingComponent,
+    NebulaCloudComponent
   ],
   imports: [
     BrowserModule,
